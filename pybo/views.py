@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.contrib import messages
 
 from .forms import QuestionForm, AnswerForm
 from .models import Question, Answer
@@ -61,4 +62,23 @@ def question_create(request):
     context = {'form': form}
     return render(request, 'pybo/question_form.html', context)
 
+
+@login_required(login_url='common:login')
+def question_modify(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.user != question.author:
+        messages.error(request, '수정 권한이 없습니다.')
+        return redirect('pybo:detail', question_id=question.id)
+    if request.method == "POST":
+        form = QuestionForm(request.POST, instance=question)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.modified_date = timezone.now()  # 수정일시 저장
+            question.save()
+            return redirect('pybo:detail', question_id=question.id)
+    else:  # GET 요청인 경우
+        # 질문수정 화면에 조회된 질문의 제목과 내용이 반영될 수 있게 폼을 생성
+        form = QuestionForm(instance=question)
+    context = {'form': form}
+    return render(request, 'pybo/question_form.html', context)
 

@@ -17,6 +17,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="my-3">
+                    {% if request.user == question.author %}
+                        <a class="btn btn-sm btn-outline-secondary"
+                        href="{% url 'pybo:question_modify' question.id %}">
+                            수정
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <!-- 답변 블록 -->
