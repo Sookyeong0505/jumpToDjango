@@ -8,6 +8,13 @@
             <div class="card-body">
                 <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
                 <div class="d-flex justify-content-end">
+                    <!-- 수정일(modify_date)이 있다면 보여준다. -->
+                    {% if question.modified_date %}
+                        <div class="badge bg-light text-dark p-2 text-start mx-3">
+                            <div class="mb-2">modified at</div>
+                            <div>{{ question.modified_date }}</div>
+                        </div>
+                    {% endif %}
                     <div class="badge bg-light text-dark p-2 text-start">
                         <div class="mb-2">
                             {{ question.author.username }}
@@ -45,6 +52,12 @@
                         {{ answer.content }}
                     </div>
                     <div class="d-flex justify-content-end">
+                        {% if answer.modified_date %}
+                            <div class="badge bg-light text-dark p-2 text-start mx-3">
+                                <div class="mb-2">modified at</div>
+                                <div>{{ answer.modified_date }}</div>
+                            </div>
+                        {% endif %}
                         <div class="badge bg-light text-dark p-2 text-start">
                             <div class="mb-2">{{ answer.author.username }}</div>
                             <div>{{ answer.create_date }}</div>

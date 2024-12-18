@@ -103,7 +103,7 @@ def answer_modify(request, answer_id):
         form = AnswerForm(request.POST, instance=answer)
         if form.is_valid():
             answer = form.save(commit=False)
-            answer.modify_date = timezone.now()
+            answer.modified_date = timezone.now()
             answer.save()
             return redirect('pybo:detail', question_id=answer.question.id)
     else:
